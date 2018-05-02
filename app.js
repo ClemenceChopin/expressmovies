@@ -20,6 +20,10 @@ app.get('/movies', (req,res) =>{
     res.render('movies', { TabMovies:FrenchMovie, title:title }); 
 });
 
+app.post('movies', (req,res) =>{
+    req.body
+});
+
 app.get('/movies/add', (req,res) =>{
     res.send('formulaire de creation ');
 });

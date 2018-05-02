@@ -18,6 +18,22 @@
 
 <% }%>
     </div>
+    <br>
+    <hr>
+    <div>
+        <form action="/movies" method="POST">
+        <label for="movietitle">titre du film</label>
+        <input type="text" name="movietitle" id="movietitle">
+        <br>
+        <label for="movieyear">annee du film</label>
+        <input type="text" name="movieyear" id="movieyear">
+        <br>
+        <button type="submit"> ajouter </button>
+
+    
+        
+        </form>
+    </div>
 </div>
 <% include ./partials/footer.ejs %>
 </body>
