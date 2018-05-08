@@ -1,14 +1,20 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer();
 
 
 app.use('/public', express.static('public'));
+
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
+let FrenchMovie = []; 
+
 app.get('/movies', (req,res) =>{
-    const FrenchMovie = [
+    FrenchMovie = [
         {title:"le fabuleux destin d'amelie lapin", year:2001 },
         {title:"buffet froid", year:1979 },
         {title:"Ready player one", year:2018 },
@@ -20,12 +26,35 @@ app.get('/movies', (req,res) =>{
     res.render('movies', { TabMovies:FrenchMovie, title:title }); 
 });
 
-app.post('movies', (req,res) =>{
-    req.body
-});
+let urlEncodedParser = bodyParser.urlencoded({extended:false});
+
+// post avec bodyparser
+// app.post('/movies',urlEncodedParser, (req,res) =>{
+//     console.log("le titre : " + req.body.movietitle);
+//     console.log("l'annee : " + req.body.movieyear);
+
+//     const newMovie = {title:req.body.movietitle, year:req.body.movieyear}
+//     //FrenchMovie.push(newMovie);
+//     FrenchMovie = [...FrenchMovie,newMovie];
+//     console.log(FrenchMovie);
+//     res.sendStatus(201);
+// });
+
+// post avec multer 
+app.post('/movies', upload.fields([]), (req,res) =>{
+    if(!req.body) {
+        return res.sendStatus(404);
+    } else {
+        const formData = req.body;
+        console.log('formData :', formData);
+        const newMovie = {title:req.body.movietitle, year:req.body.movieyear}
+        FrenchMovie = [...FrenchMovie,newMovie];
+        return res.sendStatus(201);
+    }
+})
 
 app.get('/movies/add', (req,res) =>{
-    res.send('formulaire de creation ');
+    res.send('formulaire de creation');
 });
 
 /*app.get('/movies/:id/:title', (req,res) =>{

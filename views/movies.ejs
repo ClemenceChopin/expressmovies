@@ -9,7 +9,7 @@
         <div class="central">
 <% include ./partials/header.ejs %>
     <h1><%= title %></h1>
-    <div>
+    <div class='french-movie'>
 <% for (movie of TabMovies) { %>
 
     <div>
@@ -36,5 +36,34 @@
     </div>
 </div>
 <% include ./partials/footer.ejs %>
+<script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', addMovie);
+
+    function addMovie(event){
+        event.preventDefault();
+
+        fetch('/movies', {
+                method : 'POST',
+                body : new FormData(form)
+        })
+        .then(checkStatus)
+        .catch(function(error) {
+            console.error('request failed', error);
+        })
+    }
+
+    function checkStatus(response){
+        if(response.status >= 200 && response.status < 300){
+           
+            let newMovieDiv = document.createElement('div');
+            const movietitle = document.getElementById('movietitle').value;
+            const movieyear = document.getElementById('movieyear').value;
+            newMovieDiv.innerHTML = `${movietitle} (${movieyear})`;
+            document.querySelector('.french-movie').appendChild(newMovieDiv);
+            form.reset();
+        }
+    }
+</script>
 </body>
 </html>
