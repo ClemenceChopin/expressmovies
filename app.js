@@ -43,7 +43,7 @@ let urlEncodedParser = bodyParser.urlencoded({extended:false});
 // post avec multer 
 app.post('/movies', upload.fields([]), (req,res) =>{
     if(!req.body) {
-        return res.sendStatus(404);
+        return res.sendStatus(500);
     } else {
         const formData = req.body;
         console.log('formData :', formData);
@@ -52,6 +52,22 @@ app.post('/movies', upload.fields([]), (req,res) =>{
         return res.sendStatus(201);
     }
 })
+
+app.post('/movies-search', upload.fields([]), (req,res) =>{
+    if(!req.body) {
+        return res.sendStatus(500);
+    } else {
+        const formData = req.body;
+        console.log('formData :', formData);
+        const searchMovies = {title:req.body.search};
+        console.log(searchMovies);
+        return res.sendStatus(201);
+    }
+})
+
+app.get('/movies-search', (req,res) =>{
+    res.render('movies-search');
+});
 
 app.get('/movies/add', (req,res) =>{
     res.send('formulaire de creation');
