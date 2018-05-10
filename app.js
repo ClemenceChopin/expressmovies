@@ -4,7 +4,7 @@ const PORT = 3000;
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
-
+const jwt = require('jsonwebtoken');
 
 app.use('/public', express.static('public'));
 
@@ -69,8 +69,33 @@ app.get('/movies-search', (req,res) =>{
     res.render('movies-search');
 });
 
+app.get('/login', (req,res) =>{
+    res.render('login.ejs', {title : 'Connexion'});
+});
+
 app.get('/movies/add', (req,res) =>{
     res.send('formulaire de creation');
+});
+
+const fakeUser = {email:'a@a.com',password:'qwerty'};
+const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
+
+app.post('/login',urlEncodedParser, (req,res)=>{
+    if(!req.body){
+        res.sendStatus(500);
+    }
+    else {
+        if(fakeUser.email === req.body.email && fakeUser.password === req.body.password) {
+            const myToken = jwt.sign({  iss:'http://expressmovies.fr',
+                                        user:'Sam',
+                                        role: 'moderator'},
+                                        secret);
+            res.json(myToken);
+        }
+        else{
+            res.sendStatus(403);
+        }
+    }
 });
 
 /*app.get('/movies/:id/:title', (req,res) =>{
